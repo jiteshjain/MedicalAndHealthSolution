@@ -1,0 +1,124 @@
+﻿@{
+    ViewBag.Title = "DispatchedList";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+ @using MHData.Entity;
+<div class="content-box-large">
+    <div class="row" style="padding-bottom: 10px;">
+
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Date</label>
+                @if (Session["DesireToDispatch"] != null)
+                {
+                       <input type="text" id="txtDispatchDate" class="form-control" value='@(((DispatchDesireInfo)Session["DesireToDispatch"]).DispatchDate)' />
+                }
+                else
+                {
+                    <input type="text" id="txtDispatchDate" class="form-control" />
+                }
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Dispatch No.</label>
+                @if (Session["DesireToDispatch"] != null)
+                {
+                <input type="text" id="textDispatchNo" class="form-control" value='@(((DispatchDesireInfo)Session["DesireToDispatch"]).DispatchNumber)' />
+                }
+                else 
+                {
+                    <input type="text" id="textDispatchNo" class="form-control" />
+                }
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>Sent To</label>
+                 @if (Session["DesireToDispatch"] != null)
+                {
+                    <input type="text" id="txtDispatchTo" class="form-control" value='@(((DispatchDesireInfo)Session["DesireToDispatch"]).DispatchTo)' />
+                }
+                 else
+                 {
+                     <input type="text" id="txtDispatchTo" class="form-control"  />
+                 }
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="form-group" style="float: right;">
+                <br />
+                    
+                <input type="button" title="Submit Dispatch" onclick="SubmitDispatchInfo();" class="btn btn-primary"  value="Submit Dispatch " />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+
+           
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12"> 
+            @Html.Partial("_FilterOptions"); 
+        </div>
+    </div>
+       <div class="row">
+        <div class="col-md-6">
+
+            </div>
+           <div class="col-md-6">
+                <div style="float:right;">
+                  <input type="button" title="Submit Dispatch" class="btn btn-default" value="View Dispatched Desire" onclick="GetDispatchDesires();" />
+                    </div>
+            </div>
+         </div>
+
+     <div class="row">
+        <div class="col-md-12">
+             <div id="divListView">
+            @Html.Partial("_ListView");
+            
+        </div>
+            </div>
+         </div>
+  
+</div>
+<!-- Dispatched List  -->
+<div id="desireToDispatchList" class="modal fade in">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="close-save-message" type="button" class="close"  onclick="$('#desireToDispatchList').hide();">X</button>
+                <h4 class="modal-title">Desire To Dispatch</h4>
+            </div>
+            <div class="modal-body">
+                
+                 <div id="divDispatchDesires">
+                <table class="table table-striped grid-table">
+                    <thead>
+                        <tr>
+                            <th class="grid-header"></th>
+                            <th class="grid-header">Name</th>
+                            <th class="grid-header">Post</th>
+                            <th class="grid-header">CurrentLocation</th>
+                            <th class="grid-header">Desire Location</th>
+                            <th class="grid-header"></th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+
+
+            </div>
+        </div>
+    </div>
+    
+</div> <!-- /.Modal -->

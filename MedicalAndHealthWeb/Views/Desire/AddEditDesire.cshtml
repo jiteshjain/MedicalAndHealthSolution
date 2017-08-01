@@ -1,0 +1,184 @@
+﻿@model MHData.Entity.DesireForm
+@using GridMvc.Html ;
+
+
+
+@{
+    ViewBag.Title = "AddEditDesire";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="content-box-header">
+            <div class="panel-heading">
+                <div class="panel-title">Add Edit Desire</div>
+
+                <div class="panel-options">
+                    <a href="#" data-rel="collapse"><i class="glyphicon glyphicon-refresh"></i></a>
+                    <a href="#" data-rel="reload"><i class="glyphicon glyphicon-cog"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("SaveDesire", "Desire", FormMethod.Post))
+{
+  
+@Html.ValidationSummary(false, "Please remove error.")
+    <div class="row">
+        <div class="col-md-6">
+            <div class="content-box-large">
+                <div class="panel-heading">
+                    <div class="panel-title">Current Information</div>
+                    @Html.HiddenFor(model  => model.ID);
+                </div>
+                <div class="panel-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label>S.No</label>
+
+                            @Html.TextBoxFor(model => model.SNo, new { @class = "form-control", @readonly = "readonly" })
+
+                        </div>
+                        @*<div class="form-group" style="display:none;" >
+                            <label>Name of Employee(Hindi)</label>
+
+                            @Html.TextBoxFor(model => model.NameOfEmployeeHindi, new { @class = "form-control", @style="font-family:'DevLys 010'" })
+                            @Html.ValidationMessageFor(model=> model.NameOfEmployeeHindi,"*")
+                        </div>*@
+                        <div class="form-group">
+                            <label>Name of Employee</label>
+
+                            @Html.TextBoxFor(model => model.NameOfEmployee, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model=> model.NameOfEmployee,"*")
+                        </div>
+                        <div class="form-group">
+                            <label>Post</label>
+                            @Html.TextBoxFor(model => model.Post, new { @class = "form-control" }) 
+                        </div>
+                         <div class="form-group">
+                            <label>Sepciality</label>
+                            @Html.TextBoxFor(model => model.Sepciality, new { @class = "form-control" }) 
+                        </div>
+                        <div class="form-group">
+                            <label>Department</label>
+
+                            @Html.TextBoxFor(model => model.Department, new { @class = "form-control" })
+
+                        </div>
+                        <div class="form-group">
+                            <label>Current Position At</label>
+
+                            @Html.TextBoxFor(model => model.CurrentLocation, new { @class = "form-control" })
+
+                        </div>
+                        <div class="form-group">
+                            <label>District</label>
+
+                            @Html.TextBoxFor(model => model.CurrentDistrict, new { @class = "form-control" })
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="content-box-large">
+                <div class="panel-heading">
+                    <div class="panel-title">Desire Information</div>
+
+                </div>
+                <div class="panel-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label>For Position At</label>
+                            @Html.TextBoxFor(x => Model.DesireLocation, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            <label>District</label>
+                            @Html.TextBoxFor(x => x.DesireDistrict, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            <label>Desire Type</label>
+                            @Html.TextBoxFor(x => x.DesireType, new { @class = "form-control" })
+                        </div>
+                       
+
+                        <div >
+                          
+                            <div class="row">
+                            <div class="col-sm-6">
+                                <label>Reference Name</label>
+
+                            </div>
+                            <div class="col-sm-4">
+                                <label>Reference Post</label>
+
+                            </div>
+                            <div class="col-sm-2">
+                              
+                            </div>
+                                </div>
+                            <div class="row">
+                            <div class="col-md-6">
+                                <div  class="form-group">
+                              @Html.TextBox("RefName", String.Empty, new { @class = "form-control" })
+                                    </div>
+                            </div>
+                            <div class="col-md-4">
+                              @Html.TextBox("RefPost", String.Empty, new { @class = "form-control" })
+                            </div>
+                            <div class="col-sm-2">
+                                <button type="button" onclick="return AddReferenceToSession();" class="btn btn-default"   value="AddDesireRefrence">Add</button>
+                            </div>
+                                </div>
+                             
+                            <div class="col-sm-12" id="referenceGrid" >
+
+                                @Html.Grid(Model.Referencees).Columns(columns =>
+                       {
+                                columns.Add(c => c.ReferenceName).Titled("Name").Filterable(true);
+                                columns.Add(c => c.ReferencePost).Titled("Post").Filterable(true);
+                                columns.Add()
+                                 .Encoded(false)
+                                 .Sanitized(false)
+                                 .SetWidth(30)
+                                 .RenderValueAs(o =>  @<button type="button" title="Remove" class="btn btn-default" onclick="RemoveReferenceFromSession(this)">Remove</button>);
+                       })
+                            </div>
+
+
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+    </div>
+      <div class="row">
+            <div class="col-md-12">
+                <div class="panel-body">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label>Minister's Directions</label>
+                            @Html.TextAreaFor(x => x.MinisterDirections, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            <label>Comments</label>
+                            @Html.TextAreaFor(x => x.Comments, new { @class = "form-control" })
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10">
+                                <button type="submit" class="btn btn-primary">Save</button>
+                                <button class="btn btn-Danger">Cancel</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+}

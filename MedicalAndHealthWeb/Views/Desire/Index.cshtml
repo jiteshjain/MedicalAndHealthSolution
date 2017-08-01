@@ -1,0 +1,19 @@
+﻿@using MHData.Entity;
+@model IEnumerable<DesireForm>
+@{
+    ViewBag.Title = "AddEditDesire";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+	<div class="row">
+		  		<div class="col-md-12 panel-warning">
+		  			 
+		  			</div>
+		  			<div class="content-box-large box-with-header">
+  @Html.Partial("_FilterOptions");
+                          <div id="divListView">
+			  		 @Html.Partial("_ListView");
+						<br /><br />
+					</div>
+		  		</div>
+		  	</div>

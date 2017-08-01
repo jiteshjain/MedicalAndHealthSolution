@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+@using MHData.Entity;
+    
+<div class="row">
+    <div class="col-md-12">
+      <input type="radio" value="All"  />
+        @Html.ActionLink("Export Data", "ExportData", "Report");
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        @Html.Partial("_FilterOptions"); 
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div id="divListView">
+            @Html.Partial("_ListView");
+            
+        </div>
+    </div>
+</div>

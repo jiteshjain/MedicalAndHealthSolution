@@ -1,0 +1,22 @@
+﻿ 
+<div style="padding:10px;" >
+   
+@Html.DropDownList("fltMLA", new SelectList(ViewBag.ReferenceList,""), "All References's" ,new { @class = "form-control", @style="width:15%;float:left;" })
+
+   
+@Html.DropDownList("flSpeciality", new SelectList(ViewBag.SpecialityList,""), "All Speciality" ,new { @class = "form-control", @style="width:15%;float:left;" })
+
+
+@Html.DropDownList("fltDepartments", new SelectList(ViewBag.Departments,""), "All Departments",new { @class = "form-control", @style="width:15%;float:left;margin-left:10px;" })
+
+
+@Html.DropDownList("fltPost", new SelectList(ViewBag.Posts,""), "ALL Post",new { @class = "form-control", @style="width:15%;float:left;margin-left:10px;" })
+
+
+@Html.DropDownList("fltEmployees", new SelectList(ViewBag.Employees,""), "All Employees",new { @class = "form-control", @style="width:15%;float:left;margin-left:10px;" })
+
+
+
+    <button type="button" class="btn btn-primary" style="margin-left:10px;" onclick="FilterGrid();"> Search </button>
+
+    </div>

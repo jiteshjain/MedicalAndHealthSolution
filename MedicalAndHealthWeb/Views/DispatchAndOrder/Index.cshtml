@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_MasterPage.cshtml";
+}
+
+@using MHData.Entity;
+@using MedicalAndHealthWeb.Models;
+
+
+@using GridMvc.Html
+<div class="row">
+    <div class="col-md-4">
+        @if (Session["FilterValues"] != null)
+        {
+<input type="text" id="textDispatchNo" class="form-control" value='@(((FilterModel)Session["FilterValues"]).DispatchNumber)' />
+        }
+        else
+        {
+            <input type="text" id="textDispatchNo" class="form-control" />
+        }
+
+   
+
+    </div><div class="col-md-4">
+      @Html.DropDownList("DispatchTo", new SelectList(ViewBag.DispatchToList, ""), "All References's", new { @class = "form-control", @style = "width:15%;float:left;" })
+    </div>
+    <div class="col-md-4">
+        <button type="button" class="btn btn-primary" style="margin-left: 10px;" onclick="FilterDispatchedGrid();">Search </button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="divListView">
+            @Html.Partial("_DispatchedListView");
+            
+        </div>
+    </div>
+</div>
