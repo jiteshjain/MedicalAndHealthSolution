@@ -454,7 +454,8 @@ namespace MHData
             OleDbParameter cmdParam = new OleDbParameter();
             cmdParam.ParameterName = "DispatchID";
             cmdParam.Value = dispathId;
-            DataTable dataReader = OleDbHelper.ExecuteDataTable(OleDbHelper.ACCESS_CONNECTIONSTRING, ""ab.GetRecord(""), cmdParam);
+            string query = "Select DispatchID, DesireId from DispatchedDesiresQuery";
+            DataTable dataReader = OleDbHelper.ExecuteDataTable(OleDbHelper.ACCESS_CONNECTIONSTRING, query, cmdParam);
             List<DispatchedDesires> dispatchedDesireList = new List<DispatchedDesires>();
             foreach (DataRow dr in dataReader.Rows)
             {
@@ -463,7 +464,10 @@ namespace MHData
                 PropertyInfo[] propertiesInfo = dispatchedDesire.GetType().GetProperties();
                 foreach (PropertyInfo prop in propertiesInfo)
                 {
-                    prop.SetValue(dispatchedDesire, (dr[prop.Name] == DBNull.Value) ? String.Empty : dr[prop.Name]);
+                    if(prop.PropertyType==(typeof(int)))
+                        prop.SetValue(dispatchedDesire, (dr[prop.Name] == DBNull.Value) ? 0 : Convert.ToInt32(dr[prop.Name]));
+                    else
+                        prop.SetValue(dispatchedDesire, (dr[prop.Name] == DBNull.Value) ? String.Empty : dr[prop.Name]);
                 }
                 dispatchedDesireList.Add(dispatchedDesire);
 

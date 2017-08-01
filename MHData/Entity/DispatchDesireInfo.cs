@@ -17,6 +17,6 @@ namespace MHData.Entity
     public class DispatchedDesires
     { 
         public int DispatchID { get; set; }      
-        public int DesireIds { get; set; }
+        public int DesireId { get; set; }
     }
 }

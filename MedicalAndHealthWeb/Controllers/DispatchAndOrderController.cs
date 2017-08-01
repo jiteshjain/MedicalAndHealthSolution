@@ -77,7 +77,7 @@ namespace MedicalAndHealthWeb.Controllers
             if (dispatchDesire == null)
                 dispatchDesire = new DispatchDesireInfo();
 
-            dispatchDesire.DesiresToDispatch.Add(new DispatchedDesires() {DesireIds=ID,DispatchID=dispatchDesire.ID});// += ID + ",";
+            dispatchDesire.DesiresToDispatch.Add(new DispatchedDesires() {DesireId=ID,DispatchID=dispatchDesire.ID});// += ID + ",";
             dispatchDesire.DispatchDate = DispatchDate;
             dispatchDesire.DispatchNumber = DispatchNumber;
             dispatchDesire.DispatchTo = DispatchTo;
@@ -156,7 +156,7 @@ namespace MedicalAndHealthWeb.Controllers
             {
                 if (dispatchDesire.DesiresToDispatch != null)
                 {
-                    string diesireIds = string.Join(",", dispatchDesire.DesiresToDispatch.Select(i => i.DesireIds).ToArray());
+                    string diesireIds = string.Join(",", dispatchDesire.DesiresToDispatch.Select(i => i.DesireId).ToArray());
                     if (!String.IsNullOrEmpty(diesireIds))
                         dispatchDesireList = context.GetDispatchDesireList(diesireIds);
                 }

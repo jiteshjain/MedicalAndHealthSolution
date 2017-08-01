@@ -18,7 +18,7 @@ namespace MHData
         public String GetRecord(string tableName, Int32 id = 0)
         {
             if (id == 0)
-                return "Select distinct* from " + tableName;
+                return "Select * from " + tableName;
             else
                 return "Select * from " + tableName + " where = " + id;
         }
