@@ -46,9 +46,10 @@ namespace MedicalAndHealthWeb.Controllers
 
         } 
 
-        public void ExportData()
+        public void ExportData(string selectedIds)
         {
-            context.ExportToExcel();
+            selectedIds = selectedIds.Substring(0, selectedIds.LastIndexOf(","));
+            context.ExportToExcel(selectedIds);
         }
     }
 }

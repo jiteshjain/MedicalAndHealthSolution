@@ -36,6 +36,7 @@ namespace MedicalAndHealthWeb.Controllers
             Session["DesireReferences"] = new List<ReferencesForDesire>();
             return View("AddEditDesire", new DesireForm() { SNo = nextSNo, Referencees=new List<ReferencesForDesire>() });
         }
+
         public ActionResult EditDesire(int ID)
         {
             DesireForm desireFormToEdit= context.GetRecordByID(ID);
@@ -43,6 +44,13 @@ namespace MedicalAndHealthWeb.Controllers
             Session["DesireReferences"] = desireFormToEdit.Referencees;
             return View("AddEditDesire", desireFormToEdit);
         }
+        public ActionResult DeleteDesire(int ID)
+        {
+            int result = context.DeleteDesire(ID);
+            return (result == 0) ? Json("error") : Json("delete");
+           // return RedirectToAction("Index");
+        }
+
         public ActionResult SaveDesire(MHData.Entity.DesireForm desireForm)
         {
             if (ModelState.IsValid)
@@ -59,6 +67,7 @@ namespace MedicalAndHealthWeb.Controllers
 
 
         }
+
         public JsonResult AddDesireRefrence(ReferencesForDesire refForDesire)
         {
            List<ReferencesForDesire> desireRef = (List<ReferencesForDesire>)Session["DesireReferences"];
@@ -67,8 +76,10 @@ namespace MedicalAndHealthWeb.Controllers
             if (desireRef.Exists(x => x.ReferenceName.Trim() == refForDesire.ReferenceName.Trim() && x.ReferencePost.Trim() == refForDesire.ReferencePost.Trim()))
                 return Json("AlreadyExist");
             desireRef.Add(refForDesire);
+            Session["DesireReferences"] = desireRef;
             return Json(desireRef);
         }
+
         public JsonResult DelteDesireRefrence(ReferencesForDesire refForDesire)
         {
             List<ReferencesForDesire> desireRef = (List<ReferencesForDesire>)Session["DesireReferences"];
@@ -76,8 +87,10 @@ namespace MedicalAndHealthWeb.Controllers
             ReferencesForDesire referenceObj = desireRef.Find(x => x.ReferenceName.Trim() == refForDesire.ReferenceName.Trim() && x.ReferencePost.Trim() == refForDesire.ReferencePost.Trim());
             if(referenceObj!=null)
                 desireRef.Remove(referenceObj);
+            Session["DesireReferences"] = desireRef;
             return Json(desireRef);
         }
+
         public ActionResult GetFilteredDesires(String referenceName, string department,string post,string empName,string speciality)
         {
             List<DesireForm> filterDesire = context.GetFilterDesire(referenceName.Trim(), department.Trim(), post.Trim(), empName.Trim(), speciality.Trim());

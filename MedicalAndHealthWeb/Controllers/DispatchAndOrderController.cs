@@ -77,7 +77,14 @@ namespace MedicalAndHealthWeb.Controllers
             if (dispatchDesire == null)
                 dispatchDesire = new DispatchDesireInfo();
 
-            dispatchDesire.DesiresToDispatch.Add(new DispatchedDesires() {DesireId=ID,DispatchID=dispatchDesire.ID});// += ID + ",";
+            if(dispatchDesire.DesiresToDispatch==null)
+            {
+                List<DispatchedDesires> dDesires = new List<DispatchedDesires>();
+                dDesires.Add(new DispatchedDesires() { DesireId = ID, DispatchID = dispatchDesire.ID });
+                dispatchDesire.DesiresToDispatch = dDesires;
+            }
+            else
+                dispatchDesire.DesiresToDispatch.Add(new DispatchedDesires() {DesireId=ID,DispatchID=dispatchDesire.ID});// += ID + ",";
             dispatchDesire.DispatchDate = DispatchDate;
             dispatchDesire.DispatchNumber = DispatchNumber;
             dispatchDesire.DispatchTo = DispatchTo;
@@ -107,6 +114,20 @@ namespace MedicalAndHealthWeb.Controllers
             }
             return Json("Done");// View("DispatchDesire", context.GetFilterDesire(filterValues.SelectedReferenceName.Trim(), filterValues.SelectedDepartment.Trim(), filterValues.SelectedPost.Trim(), filterValues.SelectedEmployee.Trim(),filterValues.SelectedReferenceName));
         }
+
+        public JsonResult DeleteDispatchDesireFromSession(int DesireId)
+        {
+            DispatchDesireInfo dispatchDesire = (DispatchDesireInfo)Session["DesireToDispatch"];
+            List<DesireForm> dispatchDesireList = new List<DesireForm>();
+            if (dispatchDesire.DesiresToDispatch != null)
+            {
+                dispatchDesire.DesiresToDispatch.RemoveAll(x => x.DesireId == DesireId);
+                Session["DesireReferences"] = dispatchDesire;
+                return Json("Done");
+            }
+            return Json("error");
+        }
+
         /// <summary>
         /// Used to edit Dispatch Information (calls on Edit button in Dispatch List Grid View)
         /// </summary>
@@ -167,8 +188,10 @@ namespace MedicalAndHealthWeb.Controllers
         public ActionResult SubmitDispatchInfo(DispatchDesireInfo dispatchInfo)
         {
             DispatchDesireInfo dispatchDesire = (DispatchDesireInfo)Session["DesireToDispatch"];
-            //if (dispatchDesire != null)
-            //    dispatchInfo.DesireIds = dispatchDesire.DesireIds;
+            dispatchDesire.DispatchDate = dispatchInfo.DispatchDate;
+            dispatchDesire.DispatchNumber = dispatchInfo.DispatchNumber;
+            dispatchDesire.DispatchTo= dispatchInfo.DispatchTo;
+            
             int  result = context.SaveAndUpdateDesireDispatch(dispatchDesire);
             return (result==0)?Json("error"):Json("saved");
         }
@@ -225,6 +248,12 @@ namespace MedicalAndHealthWeb.Controllers
             return PartialView("_DispatchedListView", filterDispatchList);
             
 
+        }
+        public JsonResult DeleteDispatchedDesire(int ID)
+        { 
+            int result = context.DeleteDesireDispatch(ID);
+            return (result == 0) ? Json("error") : Json("delete");
+             
         }
     }
 }

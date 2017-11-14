@@ -14,7 +14,12 @@ namespace MHData
 {
     public class DesireForms
     {
-        DataTable dtReport = null;
+        DataTable TableToExport = null;
+        /// <summary>
+        /// Method to Save and Update desire
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public int SaveAndUpdate(DesireForm obj)
         {
             int retVal = 0;
@@ -25,8 +30,7 @@ namespace MHData
 
                  OleDbTransaction trans = conn.BeginTransaction();
                  try
-                {
-                    int result =0;
+                { 
                     if (obj.ID == 0)
                         retVal = OleDbHelper.ExecuteNonQuery(conn, trans, ab.InsertDesire(obj));
                     else
@@ -63,6 +67,39 @@ namespace MHData
             return retVal;
 
         }
+        public int DeleteDesire(Int32 desireId)
+        {
+            SqlQuery ab = new SqlQuery();
+            int retVal = 0;
+            if (desireId > 0)
+            {
+                OleDbConnection conn = new OleDbConnection(OleDbHelper.ACCESS_CONNECTIONSTRING);
+                conn.Open();
+
+                OleDbTransaction trans = conn.BeginTransaction();
+                try
+                {
+                    retVal = OleDbHelper.ExecuteNonQuery(OleDbHelper.ACCESS_CONNECTIONSTRING, ab.DeleteDesiresReferences(desireId));
+                    retVal = OleDbHelper.ExecuteNonQuery(OleDbHelper.ACCESS_CONNECTIONSTRING, ab.DeleteDesire(desireId));
+                    if (retVal > 0)
+                    {
+                        trans.Commit();
+                        conn.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    trans.Rollback();
+                    conn.Close();
+                    return retVal = 0;
+                }
+            }
+            return retVal;
+        }
+        /// <summary>
+        /// List of All Desiers 
+        /// </summary>
+        /// <returns></returns>
         public List<DesireForm> DesireFormsList()
         {
             SqlQuery ab = new SqlQuery(); 
@@ -97,6 +134,11 @@ namespace MHData
               
             return desireForms;
         }
+        /// <summary>
+        /// Get Desire's References List by Desire Id
+        /// </summary>
+        /// <param name="desireId"></param>
+        /// <returns></returns>
         public List<ReferencesForDesire> DeisreReferenceeList(Int32 desireId)
         {
             SqlQuery ab = new SqlQuery();
@@ -119,6 +161,10 @@ namespace MHData
             }
             return referenceeList;
         }
+        /// <summary>
+        /// Method to Get Last Added/Inserted Desire 
+        /// </summary>
+        /// <returns></returns>
         public DesireForm GetLastDesire()
         {
             SqlQuery ab = new SqlQuery();
@@ -142,6 +188,11 @@ namespace MHData
             }
             return desireFrm;
         }
+        /// <summary>
+        /// Method to Get Desire by Desire Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public DesireForm GetRecordByID(int id)
         {
             SqlQuery ab = new SqlQuery();
@@ -168,7 +219,11 @@ namespace MHData
             }
             return desireFrm;
         }
-
+        /// <summary>
+        /// Method to Get Dsires by its Reference name
+        /// </summary>
+        /// <param name="referenceName"></param>
+        /// <returns></returns>
         public string  GetDesireIdsByRefName(String referenceName)
         {
             SqlQuery ab = new SqlQuery();
@@ -185,6 +240,10 @@ namespace MHData
             resultStr = resultStr.Replace(",#", String.Empty);
             return resultStr;
         }
+        /// <summary>
+        /// Method to Get all References List
+        /// </summary>
+        /// <returns></returns>
         public List<String> GetReferenceLlist()
         {
             SqlQuery ab = new SqlQuery();
@@ -202,6 +261,10 @@ namespace MHData
             }
             return dataList;
         }
+        /// <summary>
+        /// Method to Get List Department
+        /// </summary>
+        /// <returns></returns>
         public List<String> GetDesireDept()
         {
             SqlQuery ab = new SqlQuery();
@@ -219,6 +282,10 @@ namespace MHData
             }
             return dataList;
         }
+        /// <summary>
+        /// Method to Get all Posts 
+        /// </summary>
+        /// <returns></returns>
         public List<String> GetDesirePost()
         {
             SqlQuery ab = new SqlQuery();
@@ -236,6 +303,10 @@ namespace MHData
             }
             return dataList;
         } 
+        /// <summary>
+        /// Method to Ge List of Employees of Desires
+        /// </summary>
+        /// <returns></returns>
         public List<String> GetDesireEmp()
         {
             SqlQuery ab = new SqlQuery();
@@ -253,6 +324,10 @@ namespace MHData
             }
             return dataList;
         }
+        /// <summary>
+        /// Get List of all Desire Specialities 
+        /// </summary>
+        /// <returns></returns>
         public List<String> GetDesireSpeciality()
         {
             SqlQuery ab = new SqlQuery();
@@ -270,6 +345,10 @@ namespace MHData
             }
             return dataList;
         }
+        /// <summary>
+        /// Method to Get List of Dispatched List
+        /// </summary>
+        /// <returns></returns>
          public List<String> GetDispatchToList()
         {
             SqlQuery ab = new SqlQuery();
@@ -287,7 +366,15 @@ namespace MHData
             }
             return dataList;
         }
-
+        /// <summary>
+        /// Method List of Filtered desire based on following parameters.
+        /// </summary>
+        /// <param name="ReferenceName"></param>
+        /// <param name="Department"></param>
+        /// <param name="Post"></param>
+        /// <param name="NameOfEmployee"></param>
+        /// <param name="Speciality"></param>
+        /// <returns></returns>
          public List<DesireForm> GetFilterDesire(string ReferenceName, string Department, string Post, string NameOfEmployee, string Speciality)
         {
             SqlQuery ab = new SqlQuery();
@@ -325,7 +412,11 @@ namespace MHData
             }
             return desireForms;
         }   
-        
+        /// <summary>
+        /// Method to Get List of Deispatched Desires.
+        /// </summary>
+        /// <param name="dispatchIds"></param>
+        /// <returns></returns>
         public List<DesireForm> GetDispatchDesireList(string dispatchIds)
         {
             SqlQuery ab = new SqlQuery();
@@ -362,7 +453,11 @@ namespace MHData
             return desireForms;
         }
 
-
+        /// <summary>
+        /// Method to Save and Update Dispatched Desire.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public int SaveAndUpdateDesireDispatch(DispatchDesireInfo obj)
         {
             int retVal = 0;
@@ -374,7 +469,7 @@ namespace MHData
             OleDbTransaction trans = conn.BeginTransaction();
             try
             {
-                
+
                 if (obj.ID == 0)
                     retVal = OleDbHelper.ExecuteNonQuery(conn, trans, ab.InsertDispatch(obj));
                 else
@@ -388,7 +483,7 @@ namespace MHData
                         identity = obj.ID;
 
                     retVal = OleDbHelper.ExecuteNonQuery(conn, trans, "Delete from DispatchedDesires where DispatchID = " + identity);
-                    foreach(DispatchedDesires dd in obj.DesiresToDispatch)
+                    foreach (DispatchedDesires dd in obj.DesiresToDispatch)
                     {
                         string refQuery = ab.InsertDesireToDispatch(dd, identity);
                         retVal = OleDbHelper.ExecuteNonQuery(conn, trans, refQuery);
@@ -410,11 +505,46 @@ namespace MHData
             }
             return retVal;
 
-
-
         }
+    
+    public int DeleteDesireDispatch(Int32 dispatchId)
+    {
+        SqlQuery ab = new SqlQuery();
+        int retVal = 0;
+        if (dispatchId > 0)
+        {
+            OleDbConnection conn = new OleDbConnection(OleDbHelper.ACCESS_CONNECTIONSTRING);
+            conn.Open();
 
-        public DispatchDesireInfo GetDispatchDetailToEdit(string dispatchId)
+            OleDbTransaction trans = conn.BeginTransaction();
+            try
+            {
+                retVal = OleDbHelper.ExecuteNonQuery(OleDbHelper.ACCESS_CONNECTIONSTRING, ab.DeleteDispatchDetail (dispatchId));
+                if (retVal > 0)
+                {
+                    retVal = OleDbHelper.ExecuteNonQuery(OleDbHelper.ACCESS_CONNECTIONSTRING, ab.DeleteDispatchInfo(dispatchId));
+                    if (retVal > 0)
+                    {
+                        trans.Commit();
+                        conn.Close();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                trans.Rollback();
+                conn.Close();
+                return retVal = 0;
+            }
+        }
+        return retVal;
+    }
+    /// <summary>
+    /// Method to Get Dispatched Desire by Dispatched Id
+    /// </summary>
+    /// <param name="dispatchId"></param>
+    /// <returns></returns>
+    public DispatchDesireInfo GetDispatchDetailToEdit(string dispatchId)
         {
             SqlQuery ab = new SqlQuery();
             DataTable dt = OleDbHelper.ExecuteDataTable(OleDbHelper.ACCESS_CONNECTIONSTRING, ab.GetDispatchDetailToEdit("DispatchDesireInfo", dispatchId));
@@ -448,13 +578,18 @@ namespace MHData
             }
             return dispatchInfo;
         }
+        /// <summary>
+        /// Method to Get List of Disire to dispatch
+        /// </summary>
+        /// <param name="dispathId"></param>
+        /// <returns></returns>
         public List<DispatchedDesires> DeisreToDispatchList(Int32 dispathId)
         {
             SqlQuery ab = new SqlQuery();
             OleDbParameter cmdParam = new OleDbParameter();
             cmdParam.ParameterName = "DispatchID";
             cmdParam.Value = dispathId;
-            string query = "Select DispatchID, DesireId from DispatchedDesiresQuery";
+            string query = "Select DispatchID, DesireId from DispatchedDesiresQueryByDispatchId";
             DataTable dataReader = OleDbHelper.ExecuteDataTable(OleDbHelper.ACCESS_CONNECTIONSTRING, query, cmdParam);
             List<DispatchedDesires> dispatchedDesireList = new List<DispatchedDesires>();
             foreach (DataRow dr in dataReader.Rows)
@@ -474,6 +609,10 @@ namespace MHData
             }
             return dispatchedDesireList;
         }
+        /// <summary>
+        /// Method to Get all dispatched List
+        /// </summary>
+        /// <returns></returns>
         public List<DispatchDesireInfo> GetDispatchedList()
         {
             SqlQuery ab = new SqlQuery();
@@ -497,6 +636,12 @@ namespace MHData
 
             return dispatchedList;
         }
+        /// <summary>
+        /// method to Get List of Filtered Dispachted Desires
+        /// </summary>
+        /// <param name="dispatchTo"></param>
+        /// <param name="dispatchNo"></param>
+        /// <returns></returns>
         public List<DispatchDesireInfo> GetFilteredDispatchList(string dispatchTo, string dispatchNo)
         {
             SqlQuery ab = new SqlQuery();
@@ -530,56 +675,70 @@ namespace MHData
             return dispatchList;
         }
 
-        public void ExportToExcel()
+        public void ExportToExcel(string desireIds)
         {
-            
-
-           OleDbHelper.ExportToExcel( GetDataToExport("4,11,"), "D:\\DesireReport.xlsx");
-          
+            SetDataToExport(desireIds);
+            OleDbHelper.ExportToExcel(TableToExport, "E:\\DesireReport"+DateTime.Now.ToString("dMMyyyyHHmmss") +".xlsx");
 
         }
-
-        public DataTable  GetDataToExport(string dispatchIds)
+        /// <summary>
+        /// Method to Get Data to Export
+        /// </summary>
+        /// <param name="dispatchIds"></param>
+        /// <returns></returns>
+        public void SetDataToExport(string dispatchIds)
         {
             string [] _dispatchIds = dispatchIds.Split(",".ToCharArray());
             
-            String selectdispatchDetail = "Select * from DispatchDesireInfo";
-            DataTable dtDispatchInfo =OleDbHelper.ExecuteDataTable(OleDbHelper.ACCESS_CONNECTIONSTRING, selectdispatchDetail);
+            //String selectdispatchDetail = "Select * from DispatchDesireInfo";
+            //DataTable dtDispatchInfo =OleDbHelper.ExecuteDataTable(OleDbHelper.ACCESS_CONNECTIONSTRING, selectdispatchDetail);
 
-            String selectDesires = "Select * from DesireFormAndReferencesQry";
+            String selectDesires = "Select * from GetFullDesireDetailByDesireIds WHERE dandR.[DesireForm_ID] in (" + dispatchIds + "); ";
             DataTable dtdesires =OleDbHelper.ExecuteDataTable(OleDbHelper.ACCESS_CONNECTIONSTRING, selectDesires);
-            dtReport = GetDesireTableStructure();
-            AddDesireToTable(dtdesires);
-            AddDispatchDetailToTable(dtDispatchInfo);
 
-            return dtReport;
+            DataTable dttable = dtdesires.DefaultView.ToTable(true, "DesireForm_ID");
+            TableToExport = GetDesireTableStructure().Clone();
+            for (int idx=0;idx<dttable.Rows.Count;idx++)
+            {
+                DataRow[] dtRows = dtdesires.Select("DesireForm_ID = " + dttable.Rows[idx]["DesireForm_ID"].ToString().Trim());
+                string refAndPost = String.Empty;
+                for(int index =0;index<dtRows.Length;index++)
+                {
+                   refAndPost += dtRows[index]["ReferencesForDesire_ReferenceName"].ToString()+"("+ dtRows[index]["ReferencesForDesire_ReferencePost"].ToString()+"), ";
+                }
+                AddDesireToTable(dtRows[0], refAndPost.Substring(0,refAndPost.LastIndexOf(",")));
+                TableToExport.AcceptChanges();
+            }  
              
         }
-        public void AddDesireToTable(DataTable dt )
+        public void AddDesireToTable(DataRow sourceDR, string refNameAndPostName)
         {
-            if (dt != null)
+            if (sourceDR != null)
             {
-                for (int i = 0; i < dt.Rows.Count; i++)
-                {
-                    DataRow dr = dtReport.NewRow();
-                    DataRow sourceDR=dt.Rows[i];
-                    dr["DesireId"] =sourceDR["DesireForm_ID"];
-                     dr["SNo"]=sourceDR["SNo"];
-                     dr["NameOfEmployee"]=sourceDR["NameOfEmployee"];
-                    dr["Post"]=sourceDR["Post"];
-                    dr["Department"]=sourceDR["Department"];
-                    dr["CurrentLocation"]=sourceDR["CurrentLocation"];
-                  dr["CurrentDistrict"]=sourceDR["CurrentDistrict"];
-                    dr["DesireLocation"]=sourceDR["DesireLocation"];
-                     dr["DesireDistrict"]=sourceDR["DesireDistrict"];
+                DataRow dr = TableToExport.NewRow();
 
-                    dr["DesireType"]=sourceDR["DesireType"];
-                    dr["MinisterDirections"]=sourceDR["MinisterDirections"];
-                    dr["Comments"]=sourceDR["Comments"];
-                    dr["Sepciality"]=sourceDR["Sepciality"]; 
+                dr["DesireId"] = sourceDR["DesireForm_ID"];
+                dr["SNo"] = sourceDR["SNo"];
+                dr["DesireDate"] = sourceDR["DesireDate"];
+                dr["NameOfEmployee"] = sourceDR["NameOfEmployee"];
+                dr["Post"] = sourceDR["Post"];
+                dr["Department"] = sourceDR["Department"];
+                dr["CurrentLocation"] = sourceDR["CurrentLocation"];
+                dr["CurrentDistrict"] = sourceDR["CurrentDistrict"];
+                dr["DesireLocation"] = sourceDR["DesireLocation"];
+                dr["DesireDistrict"] = sourceDR["DesireDistrict"];
+                dr["ReferenceNameAndDept"] =refNameAndPostName;
 
-                    dtReport.Rows.Add(dr);
-                }
+                dr["DesireType"] = sourceDR["DesireType"];
+                dr["MinisterDirections"] = sourceDR["MinisterDirections"];
+                dr["Comments"] = sourceDR["Comments"];
+                dr["Sepciality"] = sourceDR["Sepciality"];
+
+                dr["DispatchDate"] = sourceDR["DispatchDate"];
+                dr["DispatchNumber"] = sourceDR["DispatchNumber"];
+                dr["DispatchTo"] = sourceDR["DispatchTo"];
+
+                TableToExport.Rows.Add(dr);
 
             }
         }
@@ -590,20 +749,20 @@ namespace MHData
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
                      string [] _dispatchDesiresIds = dt.Rows[1]["DesireIds"].ToString().Split(",".ToCharArray(),StringSplitOptions.RemoveEmptyEntries);
-                     //for (int j = 0; j < _dispatchDesiresIds.Length; j++)
-                     //{
-                     //    if (!String.IsNullOrEmpty(_dispatchDesiresIds[j]))
-                     //    {
-                     //        DataRow findDr = dtReport.AsEnumerable().Where(x=>x["DesireId"].ToString().Trim()== _dispatchDesiresIds[j])
-                     //        if (findDr != null)
-                     //        {
-                     //            findDr["DispatchDate"] = dt.Rows[i]["DispatchDate"];
-                     //            findDr["DispatchNumber"] = dt.Rows[i]["DispatchNumber"];
-                     //            findDr["DispatchTo"] = dt.Rows[i]["DispatchTo"];
-                     //        }
-                     //    }
-                     //}
-                    dtReport.AcceptChanges();
+                    //for (int j = 0; j < _dispatchDesiresIds.Length; j++)
+                    //{
+                    //    if (!String.IsNullOrEmpty(_dispatchDesiresIds[j]))
+                    //    {
+                    //        DataRow findDr = dtReport.AsEnumerable().Where(x=>x["DesireId"].ToString().Trim()== _dispatchDesiresIds[j])
+                    //        if (findDr != null)
+                    //        {
+                    //            findDr["DispatchDate"] = dt.Rows[i]["DispatchDate"];
+                    //            findDr["DispatchNumber"] = dt.Rows[i]["DispatchNumber"];
+                    //            findDr["DispatchTo"] = dt.Rows[i]["DispatchTo"];
+                    //        }
+                    //    }
+                    //}
+                    TableToExport.AcceptChanges();
                 }
 
             }
@@ -620,7 +779,7 @@ namespace MHData
             //dt.PrimaryKey=dtKeys;
 
             dt.Columns.Add(new DataColumn("SNo", Type.GetType("System.Int32")));
-            
+            dt.Columns.Add(new DataColumn("DesireDate", Type.GetType("System.String")));
             dt.Columns.Add(new DataColumn("NameOfEmployee", Type.GetType("System.String")));
             dt.Columns.Add(new DataColumn("Post", Type.GetType("System.String")));
             dt.Columns.Add(new DataColumn("Department", Type.GetType("System.String")));
@@ -634,14 +793,13 @@ namespace MHData
             dt.Columns.Add(new DataColumn("Comments", Type.GetType("System.String")));
             dt.Columns.Add(new DataColumn("Sepciality", Type.GetType("System.String")));
 
+            dt.Columns.Add(new DataColumn("ReferenceNameAndDept", Type.GetType("System.String")));
+
             dt.Columns.Add(new DataColumn("DispatchDate", Type.GetType("System.String")));
             dt.Columns.Add(new DataColumn("DispatchNumber", Type.GetType("System.String")));
             dt.Columns.Add(new DataColumn("DispatchTo", Type.GetType("System.String")));
-           
-            dt.Columns.Add(new DataColumn("ReferenceName", Type.GetType("System.String")));
-            dt.Columns.Add(new DataColumn("ReferenceDepartment", Type.GetType("System.String")));
              
-            return dt ;
+            return dt;
         }
 
     }

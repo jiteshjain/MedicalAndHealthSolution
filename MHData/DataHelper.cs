@@ -413,8 +413,8 @@ namespace MHData
 
                 // load excel, and create a new workbook
                 Microsoft.Office.Interop.Excel.Application excelApp = new Microsoft.Office.Interop.Excel.Application();
-                excelApp.Workbooks.Add();
-
+                excelApp.Workbooks.Add(Type.Missing);
+                
                 // single worksheet
                 Microsoft.Office.Interop.Excel._Worksheet workSheet = excelApp.ActiveSheet;
 
@@ -434,14 +434,16 @@ namespace MHData
                     }
                 }
 
-                // check fielpath
+                // check fielpath 
                 if (ExcelFilePath != null && ExcelFilePath != "")
                 {
                     try
                     {
                         workSheet.SaveAs(ExcelFilePath);
+                        //excelApp.Workbooks.Open(ExcelFilePath);
+                        
                         excelApp.Quit();
-                      //  MessageBox.Show("Excel file saved!");
+                        //  MessageBox.Show("Excel file saved!");
                     }
                     catch (Exception ex)
                     {

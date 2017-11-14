@@ -1,4 +1,5 @@
 ﻿
+/*Add Desire*/
 function AddReferenceToSession() {
 
     var refName = $("#RefName").val();
@@ -26,7 +27,7 @@ function AddReferenceToSession() {
     });
 
 }
-
+/*Delete/Remove Desire*/
 function RemoveReferenceFromSession(btnremove) {
 
     var row = btnremove.closest("tr");
@@ -49,6 +50,7 @@ function RemoveReferenceFromSession(btnremove) {
     });
 
 }
+/*Refresh Desire's reference List*/
 function RefereshReferenceeList(rdata) {
    
     var table = $("#referenceGrid table tbody");
@@ -60,7 +62,7 @@ function RefereshReferenceeList(rdata) {
         } 
 }
 
-
+/*Filter Desire Grid*/
 function FilterGrid() {
 
     var selectedMLA = $("#fltMLA").val();
@@ -107,16 +109,7 @@ function GetDispatchDesires() {
 
     $.get(url, function (data) {
         if (data) {
-
-            console.log(data);
-            var table = $("#divDispatchDesires table tbody");
-            table.html("");
-            var removeBtn = "<button type='button' title='Remove' class='btn btn-default' onclick='RemoveReferenceFromSession(this)'>Remove</button>";
-            for (var i = 0; i < data.length; i++) {
-                var tablecol = '<td class=>' + data[i].ID+ '</td><td>' + data[i].NameOfEmployee + '</td><td>' + data[i].Post + '</td><td>' + data[i].CurrentLocation + '</td><td>' + data[i].DesireLocation + '</td><td>' + removeBtn + '</td>';
-                table.append('<tr>' + tablecol + '</tr>'); 
-            }
-                
+            RefereshDispatcheList(data);
             $("#desireToDispatchList").show();
  
         } else {
@@ -125,7 +118,38 @@ function GetDispatchDesires() {
     });
 
 }
+function RefereshDispatcheList(data) {
 
+    console.log(data);
+    var table = $("#divDispatchDesires table tbody");
+    table.html("");
+    var removeBtn = "<button type='button' title='Remove' class='btn btn-default' onclick='RemoveDispatchedDesireFromSession(this)'>Remove</button>";
+    for (var i = 0; i < data.length; i++) {
+        var tablecol = '<td class=>' + data[i].ID + '</td><td>' + data[i].NameOfEmployee + '</td><td>' + data[i].Post + '</td><td>' + data[i].CurrentLocation + '</td><td>' + data[i].DesireLocation + '</td><td>' + removeBtn + '</td>';
+        table.append('<tr>' + tablecol + '</tr>');
+    }
+}
+function RemoveDispatchedDesireFromSession(btnremove) {
+
+    var row = btnremove.closest("tr");
+
+    var desireId = $(row).find("td").eq(0).text();
+    
+    var dataParam = { DesireId: desireId };
+    jQuery.ajax({
+        type: "POST",
+        url: '/DispatchAndOrder/DeleteDispatchDesireFromSession',
+
+        contentType: 'application/json',
+        data: JSON.stringify(dataParam),
+
+        success: function (result) {
+            if(result=="Done")
+                GetDispatchDesires();
+        }
+    });
+
+}
 function AddDesireToDispatch(id) {
 
    
@@ -151,7 +175,7 @@ function AddDesireToDispatch(id) {
  
 function AddEditDispatchInfo(id) { 
 
-    var dataParam = { id: id };
+    var dataParam = { ID: id };
     var url = window.location.pathname.split("/");
     var controller = url[1];
     jQuery.ajax({
@@ -215,4 +239,84 @@ function FilterDispatchedGrid() {
         }
     });
 
+}
+/*Method to Delete Desire*/
+function DeleteDesire(id) {
+    var dataParam = { ID: id };
+    var confirmToDelete = confirm("Are you sure, you want to delete this desire?");
+    var url = window.location.pathname.split("/");
+    var controller = url[1];
+    if (confirmToDelete) {
+        jQuery.ajax({
+            type: "POST",
+            url: '/Desire/DeleteDesire',
+            contentType: 'application/json',
+            data: JSON.stringify(dataParam),
+            success: function (result) {
+                if (result == "error") {
+                    alert("Desire could not deleted, There might be some error,\nPlease contact to your nodal officer");
+                } else {
+                    alert("Desire deleted Successfully.");
+                    window.location.href = "/Desire/Index";
+                }
+            }
+        });
+    }
+}
+/*Method to Delete Dispathced Desire*/
+function DeleteDispatchedDesire(id) {
+    var dataParam = { ID: id };
+    var confirmToDelete = confirm("Are you sure, you want to delete this Dispatched desire?");
+    var url = window.location.pathname.split("/");
+    var controller = url[1];
+    if (confirmToDelete) {
+        jQuery.ajax({
+            type: "POST",
+            url: '/DispatchAndOrder/DeleteDispatchedDesire',
+            contentType: 'application/json',
+            data: JSON.stringify(dataParam),
+            success: function (result) {
+                if (result == "error") {
+                    alert("Could not deleted, There might be some error,\nPlease contact to your nodal officer");
+                } else {
+                    alert("Dispatched desire deleted Successfully.");
+                    window.location.href = "/DispatchAndOrder/Index";
+                }
+            }
+        });
+    }
+}
+/*Get all selected desire ids to export*/
+
+function GetSelectDesireToPrint() {
+    var divReportList = $("#divReportListView");
+    var selected = [];
+    $('#divReportListView input:checked').each(function () {
+        selected.push($(this).attr('id'));
+    });
+    var selectedIds = "";
+    for (var i = 0; i < selected.length; i++)
+    {
+        selectedIds = selectedIds+selected[i] + ",";
+    }
+    alert(selectedIds);
+    var dataParam = { selectedIds: selectedIds };
+    if (selectedIds != "") {
+        jQuery.ajax({
+            type: "POST",
+            url: '/Report/ExportData',
+            contentType: 'application/json',
+            data: JSON.stringify(dataParam),
+            success: function (result) {
+                if (result == "error") {
+                    //alert("Could not deleted, There might be some error,\nPlease contact to your nodal officer");
+                } else {
+                    //alert("Dispatched desire deleted Successfully.");
+                   // window.location.href = "/DispatchAndOrder/Index";
+                }
+            }
+        });
+    }
+   
+    return false;
 }

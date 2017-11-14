@@ -111,6 +111,16 @@ namespace MHData
 
             return query;
         }
+        public String DeleteDesire(Int32 desireId)
+        { 
+            return  "Delete from DesireForm Where ID = " + desireId; 
+             
+        }
+        public String DeleteDesiresReferences(Int32 desireId)
+        {
+            return "Delete from ReferencesForDesire Where DesireId = "+ desireId;
+             
+        }
         public String InsertDesireReferences(ReferencesForDesire desireReferences, int desireId)
         {
 
@@ -223,7 +233,7 @@ namespace MHData
             //Set Column Name 
             foreach (PropertyInfo prop in propertiesInfo)
             {
-                if (prop.Name == "ID")
+                if (prop.Name == "ID" || prop.PropertyType == typeof(List<DispatchedDesires>))
                     continue;
                 columns += prop.Name + ",";
                 columnValues += (prop.PropertyType == typeof(String)) ? "'" + prop.GetValue(dispatchInfo) + "'," : prop.GetValue(dispatchInfo) + ",";
@@ -254,12 +264,34 @@ namespace MHData
                 }
                 else
                 {
+                    if (prop.PropertyType == typeof(List<DispatchedDesires>))
+                        continue;
+
                     updateColumnValues += prop.Name + " = " + ((prop.PropertyType == typeof(String)) ? "'" + prop.GetValue(dispatchInfo) + "'," : prop.GetValue(dispatchInfo) + ", ");
                 }
             }
             query = query + updateColumnValues.Substring(0, updateColumnValues.Length - 1) + whereCondition;
 
             return query;
+        }
+        /// <summary>
+        /// Get Query To Delete Desire Dispatch Info.
+        /// </summary>
+        /// <param name="dispatchInfo"></param>
+        /// <returns></returns>
+        public String DeleteDispatchInfo(Int32 dispatchId)
+        {
+
+            return "Delete from DispatchDesireInfo where ID ="+ dispatchId;
+        }
+        /// <summary>
+        /// Get Query To Delete Desire Dispatch detail.
+        /// </summary>
+        /// <param name="dispatchInfo"></param>
+        /// <returns></returns>
+        public String DeleteDispatchDetail(Int32 dispatchId)
+        {
+            return "Delete from DispatchedDesires where DispatchID =" + dispatchId;
         }
         public String GetFilterDispatchByParam(string tableName, params string[] param)
         {

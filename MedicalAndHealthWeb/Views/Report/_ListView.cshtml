@@ -4,23 +4,27 @@
 @using GridMvc.Html 
 
 
-  @Html.Grid(Model).Columns(columns =>  
-                    {  
-                        columns.Add(c => c.SNo).Titled("SNo").Filterable(true);
-                        columns.Add(c => c.NameOfEmployee).Titled("Employee Name").Filterable(true);
-                        columns.Add(c => c.Post).Titled("Post").Filterable(true);
-                        columns.Add(c => c.Department).Titled("Department").Filterable(true);
-                        columns.Add(c => c.CurrentLocation).Titled("Current DP.").Filterable(true);
-                        columns.Add(c => c.CurrentDistrict).Titled("Destrict").Filterable(true);
-                        columns.Add(c => c.DesireLocation).Titled("Desired Deputation").Filterable(true);
-                        columns.Add(c => c.DesireDistrict).Titled("Desired District").Filterable(true);
-                        columns.Add(c => c.DesireType).Titled("Desired Type").Filterable(true);
-                         
-                         
-                        columns.Add()  
-                        .Encoded(false)  
-                        .Sanitized(false)  
-                        .SetWidth(30)
-                        .RenderValueAs(o => Html.ActionLink("Edit", "EditDesire", new { id = o.ID }));  
-                          
-                    }).WithPaging(10).Sortable(true)  
+  @Html.Grid(Model).Columns(columns =>
+{
+    columns.Add().Encoded(false)
+    .Sanitized(false)
+    .SetWidth(30).RenderValueAs(o => Html.CheckBox("select",false,new { id = o.ID }));
+
+    columns.Add(c => c.SNo).Titled("SNo").Filterable(true);
+    columns.Add(c => c.NameOfEmployee).Titled("Employee Name").Filterable(true);
+    columns.Add(c => c.Post).Titled("Post").Filterable(true);
+    columns.Add(c => c.Department).Titled("Department").Filterable(true);
+    columns.Add(c => c.CurrentLocation).Titled("Current DP.").Filterable(true);
+    columns.Add(c => c.CurrentDistrict).Titled("Destrict").Filterable(true);
+    columns.Add(c => c.DesireLocation).Titled("Desired Deputation").Filterable(true);
+    columns.Add(c => c.DesireDistrict).Titled("Desired District").Filterable(true);
+    columns.Add(c => c.DesireType).Titled("Desired Type").Filterable(true);
+
+
+    columns.Add()
+    .Encoded(false)
+    .Sanitized(false)
+    .SetWidth(30)
+    .RenderValueAs(o => Html.ActionLink("Edit", "EditDesire", new { id = o.ID }));
+
+}).WithPaging(10).Sortable(true)  m

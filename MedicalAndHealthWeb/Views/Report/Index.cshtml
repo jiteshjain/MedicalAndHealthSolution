@@ -7,8 +7,9 @@
 <div class="row">
     <div class="col-md-12">
       <input type="radio" value="All"  />
-        @Html.ActionLink("Export Data", "ExportData", "Report");
-    </div>
+        <a onclick= "GetSelectDesireToPrint()" class="btn btn-link">Print Selected</a>
+        @*@Html.ActionLink("Print All Data", "ExportData", "Report", new {onclick= "GetSelectDesireToPrint();" });
+    </div>*@
 </div>
 <div class="row">
     <div class="col-md-12">
@@ -17,7 +18,7 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div id="divListView">
+        <div id="divReportListView">
             @Html.Partial("_ListView");
             
         </div>
