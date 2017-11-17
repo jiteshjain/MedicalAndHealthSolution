@@ -5,22 +5,25 @@
 @using MHData.Entity;
     
 <div class="row">
-    <div class="col-md-12">
-      <input type="radio" value="All"  />
-        <a onclick= "GetSelectDesireToPrint()" class="btn btn-link">Print Selected</a>
-        @*@Html.ActionLink("Print All Data", "ExportData", "Report", new {onclick= "GetSelectDesireToPrint();" });
-    </div>*@
+ <div class="col-md-12" >
+     <div>
+         <input type="radio" value="All" />
+         <a onclick="GetSelectDesireToPrint()" class="btn btn-link">Print</a>
+     </div>
+</div>
 </div>
 <div class="row">
     <div class="col-md-12">
-        @Html.Partial("_FilterOptions"); 
+        @Html.Partial("_FilterOptions")
     </div>
 </div>
 <div class="row">
     <div class="col-md-12">
+        <div>
+            <a onclick="SelectDeselect()" class="btn btn-danger">Select/Deselect All</a>
+        </div>
         <div id="divReportListView">
-            @Html.Partial("_ListView");
-            
+            @Html.Partial("_ListView")
         </div>
     </div>
 </div>

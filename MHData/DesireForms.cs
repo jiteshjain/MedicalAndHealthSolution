@@ -240,6 +240,22 @@ namespace MHData
             resultStr = resultStr.Replace(",#", String.Empty);
             return resultStr;
         }
+        public String GetDispatchedDesireIds()
+        {
+            SqlQuery ab = new SqlQuery();
+            DataTable dt = OleDbHelper.ExecuteDataTable(OleDbHelper.ACCESS_CONNECTIONSTRING, ab.GetDispatchedDesireIds());
+            string resultStr = String.Empty;
+            if (dt != null)
+            {
+                foreach (DataRow strID in dt.Rows)
+                {
+                    resultStr += strID["DesireID"].ToString() + ",";
+                }
+                resultStr += "#";
+            }
+            resultStr = resultStr.Replace(",#", String.Empty);
+            return resultStr;
+        }
         /// <summary>
         /// Method to Get all References List
         /// </summary>
@@ -675,10 +691,11 @@ namespace MHData
             return dispatchList;
         }
 
-        public void ExportToExcel(string desireIds)
+        public void ExportToExcel(string path,string desireIds)
         {
             SetDataToExport(desireIds);
-            OleDbHelper.ExportToExcel(TableToExport, "E:\\DesireReport"+DateTime.Now.ToString("dMMyyyyHHmmss") +".xlsx");
+          
+            OleDbHelper.ExportToExcel(TableToExport, path);
 
         }
         /// <summary>
@@ -694,6 +711,8 @@ namespace MHData
             //DataTable dtDispatchInfo =OleDbHelper.ExecuteDataTable(OleDbHelper.ACCESS_CONNECTIONSTRING, selectdispatchDetail);
 
             String selectDesires = "Select * from GetFullDesireDetailByDesireIds WHERE dandR.[DesireForm_ID] in (" + dispatchIds + "); ";
+            if(dispatchIds.Trim()==String.Empty)
+                selectDesires = "Select * from GetFullDesireDetailByDesireIds ";
             DataTable dtdesires =OleDbHelper.ExecuteDataTable(OleDbHelper.ACCESS_CONNECTIONSTRING, selectDesires);
 
             DataTable dttable = dtdesires.DefaultView.ToTable(true, "DesireForm_ID");

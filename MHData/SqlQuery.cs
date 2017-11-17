@@ -26,15 +26,20 @@ namespace MHData
         {
             return "Select distinct* from " + tableName + " where ReferenceName= '" + fieldValue + "'";
         }
+        public String GetDispatchedDesireIds()
+        {
+            return "Select distinct DesireID from DispatchedDesires";
+        }
         public String GetFilterDesireByParam(string tableName, params string[] param)
         {
             string strquery = "Select distinct* from " + tableName;
             string strVal = String.Empty;
             bool isAndReq = false;
             string disireIdByRef = string.Empty;
+            DesireForms db = new DesireForms();
+            strVal += " ID not in ( " + db.GetDispatchedDesireIds() + " )";
             if (param[0] != "")
             {
-                DesireForms db = new DesireForms();
                 disireIdByRef = db.GetDesireIdsByRefName(param[0]);
                 strVal += " ID in ( " + disireIdByRef + " )";
                 isAndReq = true;

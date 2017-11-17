@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using System.IO;
 
 using MHData.Entity;
 using MHData;
@@ -27,7 +27,8 @@ namespace MedicalAndHealthWeb.Controllers
         public ActionResult Index()
         {
             BindViewBags();
-            return View(context.GetFilterDesire("".Trim(), "".Trim(), "".Trim(), "".Trim(), ""));
+            return View(context.DesireFormsList());
+            //return View(context.GetFilterDesire("".Trim(), "".Trim(), "".Trim(), "".Trim(), ""));
         }
         public ActionResult GetFilteredDesires(String referenceName, string department, string post, string empName,Boolean isDispatchedDesires)
         {
@@ -46,10 +47,23 @@ namespace MedicalAndHealthWeb.Controllers
 
         } 
 
-        public void ExportData(string selectedIds)
+        public JsonResult ExportData(string selectedIds)
         {
-            selectedIds = selectedIds.Substring(0, selectedIds.LastIndexOf(","));
-            context.ExportToExcel(selectedIds);
+            JsonResult result = Json("delete"); 
+            try
+            {
+                selectedIds = !String.IsNullOrEmpty(selectedIds.Trim())? selectedIds.Substring(0, selectedIds.LastIndexOf(",")):String.Empty;
+                string serverpath = HttpContext.Server.MapPath("~\\ReportOutput") + "\\DesireReport_" + DateTime.Now.ToString("dMMyyyyHHmmss") + ".xlsx";
+                string pathToExport = System.Configuration.ConfigurationManager.AppSettings["ReportFolder"].ToString();
+                context.ExportToExcel(pathToExport + @"\DesireReport_" + DateTime.Now.ToString("dMMyyyyHHmmss") + ".xlsx",selectedIds);
+                result= Json("complete");
+            }
+            catch (Exception ex)
+            {
+                result= Json("delete");
+                throw;
+            }
+            return result;
         }
     }
 }

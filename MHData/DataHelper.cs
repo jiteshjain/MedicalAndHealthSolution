@@ -413,7 +413,8 @@ namespace MHData
 
                 // load excel, and create a new workbook
                 Microsoft.Office.Interop.Excel.Application excelApp = new Microsoft.Office.Interop.Excel.Application();
-                excelApp.Workbooks.Add(Type.Missing);
+                
+                excelApp.Workbooks.Add();
                 
                 // single worksheet
                 Microsoft.Office.Interop.Excel._Worksheet workSheet = excelApp.ActiveSheet;
@@ -441,10 +442,12 @@ namespace MHData
                     {
                         workSheet.SaveAs(ExcelFilePath);
                         //excelApp.Workbooks.Open(ExcelFilePath);
-                        
+                        excelApp.Workbooks.Close();
                         excelApp.Quit();
+                        
+
                         //  MessageBox.Show("Excel file saved!");
-                    }
+                    }   
                     catch (Exception ex)
                     {
                         throw new Exception("ExportToExcel: Excel file could not be saved! Check filepath.\n"

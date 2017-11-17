@@ -1,10 +1,10 @@
 ﻿ 
-<div style="padding:10px;" >
+<div style="padding-bottom:5px;" >
    
 @Html.DropDownList("fltMLA", new SelectList(ViewBag.ReferenceList,""), "All References's" ,new { @class = "form-control", @style="width:15%;float:left;" })
 
    
-@Html.DropDownList("flSpeciality", new SelectList(ViewBag.SpecialityList,""), "All Speciality" ,new { @class = "form-control", @style="width:15%;float:left;" })
+@Html.DropDownList("flSpeciality", new SelectList(ViewBag.SpecialityList,""), "All Speciality" ,new { @class = "form-control", @style= "width:15%;float:left;margin-left:10px;" })
 
 
 @Html.DropDownList("fltDepartments", new SelectList(ViewBag.Departments,""), "All Departments",new { @class = "form-control", @style="width:15%;float:left;margin-left:10px;" })

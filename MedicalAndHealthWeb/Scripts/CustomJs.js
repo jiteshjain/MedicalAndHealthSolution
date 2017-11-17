@@ -299,24 +299,36 @@ function GetSelectDesireToPrint() {
     {
         selectedIds = selectedIds+selected[i] + ",";
     }
-    alert(selectedIds);
+  
     var dataParam = { selectedIds: selectedIds };
-    if (selectedIds != "") {
+     
         jQuery.ajax({
             type: "POST",
             url: '/Report/ExportData',
             contentType: 'application/json',
             data: JSON.stringify(dataParam),
             success: function (result) {
-                if (result == "error") {
-                    //alert("Could not deleted, There might be some error,\nPlease contact to your nodal officer");
+                if (result == "complete") {
+                    alert("Exported successfully.");
+                   // window.location.href = "/Report/Index";
                 } else {
-                    //alert("Dispatched desire deleted Successfully.");
-                   // window.location.href = "/DispatchAndOrder/Index";
+                    alert("Error : Data could not exported.");
+                   // window.location.href = "/Report/Index";
                 }
             }
         });
-    }
+    
    
     return false;
+}
+function SelectDeselect()
+{
+    var divReportList = $("#divReportListView");
+     
+    $('#divReportListView input:checkbox').each(function () { 
+        if ($(this).prop('checked'))
+            $(this).prop('checked', false);
+        else
+            $(this).prop('checked', true);
+    });
 }
